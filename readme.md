@@ -14,6 +14,6 @@ The following steps are performed:
 No time is spend to prevent hardcoded queue names, etc.
 
 ## Run
-- Start JMS queue with docker-compose file (environment/docker directory)
+- Start JMS queue with docker-compose file (*environment/docker* directory)
 - start application with class 'JmsCamelApplication'.
 - [Redis GUI](http://localhost:5540/) to access the Redis database.
