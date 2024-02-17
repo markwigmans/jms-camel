@@ -31,16 +31,8 @@ jobs:
         with:
           string: ${{ github.repository_owner }}
 
-      - name: Generate build number
-        id: buildnumber
-        uses: onyxmueller/build-tag-number@v1
-        with:
-          token: ${{secrets.github_token}}
-        env:
-          BUILD_NUMBER: ${{ steps.buildnumber.outputs.build_number }}
-
       - name: Build with Maven
-        run: mvn install -U -P docker -Ddocker.repo=${{ env.REGISTRY }}/${{ steps.repository_owner.outputs.lowercase }} -Ddocker.app.tag=${{ env.IMAGE_TAG }} -Ddocker.app.build.tag=${{ env.BUILD_NUMBER }}
+        run: mvn install -U -P docker -Ddocker.repo=${{ env.REGISTRY }}/${{ steps.repository_owner.outputs.lowercase }} -Ddocker.app.tag=${{ env.IMAGE_TAG }}
         env:
           USER_NAME: ${{ secrets.USER_NAME }}
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
