@@ -2,6 +2,20 @@ name: jms-camel
 
 services:
 
+  app:
+    image: ghcr.io/markwigmans/jms-camel:latest
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_ARTEMIS_BROKER-URL: "tcp://mq:61616"
+      SPRING_DATA_REDIS_HOST: redis
+    depends_on:
+      - db
+      - mq
+      - mongo
+      - es
+    restart: on-failure
+
   mq:
     image: apache/activemq-artemis:latest
     ports:
