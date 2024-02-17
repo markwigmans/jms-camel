@@ -3,14 +3,13 @@ name: jms-camel
 services:
 
   mq:
-    image: quay.io/artemiscloud/activemq-artemis-broker:artemis.2.31.2
+    image: apache/activemq-artemis:latest
     ports:
       - "8161:8161"
       - "61616:61616"
     environment:
-      AMQ_USER: CNL
-      AMQ_PASSWORD: CNL
-      AMQ_EXTRA_ARGS: "--relax-jolokia --require-login"
+      - ARTEMIS_USER=CNL
+      - ARTEMIS_PASSWORD=CNL
 
   redis:
     image: redis:latest
