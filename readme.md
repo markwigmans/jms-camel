@@ -2,6 +2,8 @@
 Experiment to work with [Camel](https://camel.apache.org/), 
 [Spring Boot](https://spring.io/projects/spring-boot) and [JMS](https://activemq.apache.org/components/artemis/) and filter all repeating JMS messages.
 
+
+In the source code, designed exclusively for demonstration purposes, no effort is made to avoid hardcoding queue names and similar configurations.
 ## Working
 
 ```mermaid
@@ -17,7 +19,6 @@ sequenceDiagram
     NEXT->>UNIQUE: Filter
     UNIQUE->>PROCESSED: Process
 ```
-No time is spend in the source code to prevent hardcoded queue names, etc.
 
 ## Running the Application
 
