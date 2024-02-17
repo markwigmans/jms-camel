@@ -18,6 +18,11 @@
     <properties>
         <java.version>17</java.version>
         <camel.version>4.3.0</camel.version>
+
+        <docker.app.name>${project.artifactId}</docker.app.name>
+        <docker.app.tag>latest</docker.app.tag>
+        <docker.app.build.tag>${maven.build.timestamp}</docker.app.build.tag>
+        <docker.repo>local</docker.repo>
     </properties>
 
     <dependencyManagement>
@@ -68,5 +73,36 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>docker</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <image>
+                                <name>${docker.repo}/${docker.app.name}</name>
+                                <tags>
+                                    ${docker.repo}/${docker.app.name}:${docker.app.tag}
+                                </tags>
+                                <publish>false</publish>
+                            </image>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>build-image</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 
 </project>
