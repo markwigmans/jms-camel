@@ -4,12 +4,7 @@ Experiment to work with [Camel](https://camel.apache.org/),
 
 ## Working
 
-The following steps are performed:
-
-1. every 5 seconds: create standard JMS message and send it to queue **INCOMING**
-2. Add header to JMS message and send multiple copies to queue **NEXT**
-3. Filter all unique JMS messages and send them to queue **UNIQUE**
-4. receive all JMS messages and send them to queue **PROCESSED**
+![Flow](flow.png)
 
 No time is spend to prevent hardcoded queue names, etc.
 

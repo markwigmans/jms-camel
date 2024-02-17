@@ -43,6 +43,6 @@ public class CamelArtemisRouteBuilder extends RouteBuilder {
         // Receive the message from the queue and make them processed.
         from("jms:queue:UNIQUE").routeId("receive-route")
                 .log("Received a message from UNIQUE - id:'${header.UniqueID}', body:'${body}'")
-                .to("jms:queue:PROCESSED?exchangePattern=InOnly");
+                .to("jms:queue:PROCESSED");
     }
 }
