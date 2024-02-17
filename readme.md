@@ -24,8 +24,8 @@ sequenceDiagram
 
 Follow these steps to get the application up and running:
 
-1. **Start the JMS Queue**:
-    - Use the provided `docker-compose` file located in the `environment/docker` directory to initialize the JMS queue.
+1. **Start the Environment**:
+    - Use the provided `docker-compose` file located in the `environment/docker` directory to initialize the environment.
 
 2. **Launch the Application**:
     - Start the application by running the `JmsCamelApplication` class.
