@@ -11,3 +11,15 @@ services:
       AMQ_USER: CNL
       AMQ_PASSWORD: CNL
       AMQ_EXTRA_ARGS: "--relax-jolokia --require-login"
+
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+
+  redis-gui:
+    image: redislabs/redisinsight:latest
+    restart: always
+    ports:
+      - "5540:5540"

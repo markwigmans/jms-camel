@@ -5,3 +5,7 @@ spring:
     password: CNL
   application:
     name: jms-camel
+
+camel:
+  springboot:
+    main-run-controller: true
