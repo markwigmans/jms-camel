@@ -4,8 +4,6 @@ Experiment to work with [Camel](https://camel.apache.org/),
 
 ## Working
 
-![Flow](flow.png)
-
 ```mermaid
 sequenceDiagram
     participant INCOMING
