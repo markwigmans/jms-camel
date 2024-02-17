@@ -6,7 +6,20 @@ Experiment to work with [Camel](https://camel.apache.org/),
 
 ![Flow](flow.png)
 
-No time is spend to prevent hardcoded queue names, etc.
+```mermaid
+sequenceDiagram
+    participant INCOMING
+    participant NEXT
+    participant UNIQUE
+    participant PROCESSED
+    loop every 5 seconds
+        INCOMING->>INCOMING: New event
+    end
+    INCOMING->>NEXT: Send multiple copies
+    NEXT->>UNIQUE: Filter
+    UNIQUE->>PROCESSED: Process
+```
+No time is spend in the source code to prevent hardcoded queue names, etc.
 
 ## Run
 - Start JMS queue with docker-compose file (*environment/docker* directory)
