@@ -68,6 +68,7 @@ public class AggregateMessageRoute extends RouteBuilder {
                 .aggregate(simple("${body.id}"), new MyAggregationStrategy())
                 .aggregationRepository(repository)
                 .completionTimeout(TimeUnit.MILLISECONDS.convert(completionTimeout, TimeUnit.SECONDS))
+                .parallelProcessing()
                 .process(exchange -> {
                     final List<MyMessage> messages = exchange.getIn().getBody(List.class);
                     log.debug("Aggregated Messages: {}", messages);
