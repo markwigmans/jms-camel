@@ -28,7 +28,7 @@ public class UniqueMessageRoute extends RouteBuilder {
         redisIdRepository.setExpiry(expiry);
 
         // Send a message to a queue every X period
-        from(String.format("timer:mytimer?period=%d", period)).routeId("unique.generate-route")
+        from(String.format("timer:unique.testTimer?period=%d", period)).routeId("unique.generate-route")
                 .transform().constant("HELLO from Camel!")
                 .to("jms:queue:INCOMING");
 

@@ -1,5 +1,6 @@
 package com.btb.jmscamel;
 
+import io.netty.util.internal.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.AggregationStrategy;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -37,34 +37,35 @@ public class AggregateMessageRoute extends RouteBuilder {
     @Value("${jc.aggregate.completion.timeout.sec:10}")
     private int completionTimeout;
 
-    @Value("${jc.aggregate.completion.checker.interval:1000}")
-    private int completionCheckerInterval;
+    @Value("${jc.aggregate.completion.checker.interval.start:500}")
+    private int startCompletionCheckerInterval;
+    @Value("${jc.aggregate.completion.checker.interval.end:1500}")
+    private int endCompletionCheckerInterval;
 
-    @Value("${jc.aggregate.range:10}")
-    private int range;
+    @Value("${jc.aggregate.range.start:5}")
+    private int startRange;
+    @Value("${jc.aggregate.range.end:10}")
+    private int endRange;
 
     /**
      *
      */
     public void configure() {
         AggregationRepository repository = new RedisAggregationRepository("jms-aggregate", endpoint);
-        Random random = new Random(123);
 
         // Send a message to a queue every X period
-        from(String.format("timer:aggregateTestTimer?period=%d", period)).routeId("aggregate.generate-route")
+        from(String.format("timer:aggregate.testTimer?period=%d", period)).routeId("aggregate.generate-route")
                 .process(exchange -> {
                     final String id = UUID.randomUUID().toString();
-                    IntStream.range(0,random.nextInt(range)).forEach(i -> {
+                    IntStream.range(0, ThreadLocalRandom.current().nextInt(startRange, endRange)).forEach(i -> {
                         MyMessage message = new MyMessage(id, Integer.toString(counter.incrementAndGet()));
                         var newExchange = exchange.copy();
                         newExchange.getIn().setBody(message);
-                        producerTemplate.send("direct:marshalToJson", newExchange);
+                        producerTemplate.send("direct:aggregate.marshalToJson", newExchange);
                     });
                 });
 
-        from("direct:marshalToJson")
-                .marshal().json(JsonLibrary.Jackson)
-                .to("jms:queue:A_INCOMING");
+        from("direct:aggregate.marshalToJson").marshal().json(JsonLibrary.Jackson).to("jms:queue:A_INCOMING");
 
         from("jms:queue:A_INCOMING").routeId("aggregate.aggregate-route")
                 .unmarshal().json(JsonLibrary.Jackson, MyMessage.class)
@@ -72,7 +73,7 @@ public class AggregateMessageRoute extends RouteBuilder {
                 .aggregationRepository(repository)
                 .completionTimeout(TimeUnit.MILLISECONDS.convert(completionTimeout, TimeUnit.SECONDS))
                 .parallelProcessing()
-                .completionTimeoutCheckerInterval(completionCheckerInterval)
+                .completionTimeoutCheckerInterval(ThreadLocalRandom.current().nextInt(startCompletionCheckerInterval, endCompletionCheckerInterval))
                 .process(exchange -> {
                     final List<MyMessage> messages = exchange.getIn().getBody(List.class);
                     log.debug("Aggregated Messages: {}", messages);
