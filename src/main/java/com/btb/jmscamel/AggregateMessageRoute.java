@@ -31,7 +31,7 @@ public class AggregateMessageRoute extends RouteBuilder {
     @Value("${jc.aggregate.redis.endpoint:127.0.0.1:6379}")
     private String endpoint;
 
-    @Value("${jc.aggregate.timer.period:1000}")
+    @Value("${jc.aggregate.timer.period:5000}")
     private int period;
 
     public void configure() {
@@ -39,7 +39,7 @@ public class AggregateMessageRoute extends RouteBuilder {
         Random random = new Random(123);
 
         // Send 3 messages to a queue every 5 seconds
-        from(String.format("timer:aggregateTestTimer?period=%d", period)).routeId("generate-route")
+        from(String.format("timer:aggregateTestTimer?period=%d", period)).routeId("aggregate.generate-route")
                 .process(exchange -> {
                     final String id = UUID.randomUUID().toString();
                     IntStream.range(0,random.nextInt(10)).forEach(i -> {
@@ -54,7 +54,7 @@ public class AggregateMessageRoute extends RouteBuilder {
                 .marshal().json(JsonLibrary.Jackson)
                 .to("jms:queue:A_INCOMING");
 
-        from("jms:queue:A_INCOMING")
+        from("jms:queue:A_INCOMING").routeId("aggregate.aggregate-route")
                 .unmarshal().json(JsonLibrary.Jackson, MyMessage.class)
                 .aggregate(simple("${body.id}"), new MyAggregationStrategy())
                 .aggregationRepository(repository)
@@ -71,7 +71,7 @@ public class AggregateMessageRoute extends RouteBuilder {
                 .marshal().json(JsonLibrary.Jackson)
                 .to("jms:queue:A_AGGREGATED");
 
-        from("jms:queue:A_AGGREGATED").routeId("receive-route")
+        from("jms:queue:A_AGGREGATED").routeId("aggregate.receive-route")
                 .log("Received a message from AGGREGATED - body:'${body}'")
                 .to("jms:queue:PROCESSED");
 }
