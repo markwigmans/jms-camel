@@ -37,6 +37,9 @@ public class AggregateMessageRoute extends RouteBuilder {
     @Value("${jc.aggregate.completion.timeout.sec:10}")
     private int completionTimeout;
 
+    @Value("${jc.aggregate.completion.checker.interval:1000}")
+    private int completionCheckerInterval;
+
     @Value("${jc.aggregate.range:10}")
     private int range;
 
@@ -69,6 +72,7 @@ public class AggregateMessageRoute extends RouteBuilder {
                 .aggregationRepository(repository)
                 .completionTimeout(TimeUnit.MILLISECONDS.convert(completionTimeout, TimeUnit.SECONDS))
                 .parallelProcessing()
+                .completionTimeoutCheckerInterval(completionCheckerInterval)
                 .process(exchange -> {
                     final List<MyMessage> messages = exchange.getIn().getBody(List.class);
                     log.debug("Aggregated Messages: {}", messages);
