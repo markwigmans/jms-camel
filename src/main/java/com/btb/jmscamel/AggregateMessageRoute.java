@@ -34,15 +34,24 @@ public class AggregateMessageRoute extends RouteBuilder {
     @Value("${jc.aggregate.timer.period:5000}")
     private int period;
 
+    @Value("${jc.aggregate.completion.timeout.sec:10}")
+    private int completionTimeout;
+
+    @Value("${jc.aggregate.range:10}")
+    private int range;
+
+    /**
+     *
+     */
     public void configure() {
         AggregationRepository repository = new RedisAggregationRepository("jms-aggregate", endpoint);
         Random random = new Random(123);
 
-        // Send 3 messages to a queue every 5 seconds
+        // Send a message to a queue every X period
         from(String.format("timer:aggregateTestTimer?period=%d", period)).routeId("aggregate.generate-route")
                 .process(exchange -> {
                     final String id = UUID.randomUUID().toString();
-                    IntStream.range(0,random.nextInt(10)).forEach(i -> {
+                    IntStream.range(0,random.nextInt(range)).forEach(i -> {
                         MyMessage message = new MyMessage(id, Integer.toString(counter.incrementAndGet()));
                         var newExchange = exchange.copy();
                         newExchange.getIn().setBody(message);
@@ -58,7 +67,7 @@ public class AggregateMessageRoute extends RouteBuilder {
                 .unmarshal().json(JsonLibrary.Jackson, MyMessage.class)
                 .aggregate(simple("${body.id}"), new MyAggregationStrategy())
                 .aggregationRepository(repository)
-                .completionTimeout(TimeUnit.MILLISECONDS.convert(10, TimeUnit.SECONDS))
+                .completionTimeout(TimeUnit.MILLISECONDS.convert(completionTimeout, TimeUnit.SECONDS))
                 .process(exchange -> {
                     final List<MyMessage> messages = exchange.getIn().getBody(List.class);
                     log.debug("Aggregated Messages: {}", messages);

@@ -27,7 +27,7 @@ public class UniqueMessageRoute extends RouteBuilder {
         RedisStringIdempotentRepository redisIdRepository = new RedisStringIdempotentRepository(redisTemplate,"jms-messages");
         redisIdRepository.setExpiry(expiry);
 
-        // Send a message to a queue every 5 seconds
+        // Send a message to a queue every X period
         from(String.format("timer:mytimer?period=%d", period)).routeId("unique.generate-route")
                 .transform().constant("HELLO from Camel!")
                 .to("jms:queue:INCOMING");
