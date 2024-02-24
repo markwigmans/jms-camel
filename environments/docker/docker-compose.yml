@@ -4,11 +4,11 @@ services:
 
   app:
     image: ghcr.io/markwigmans/jms-camel:latest
-    ports:
-      - "8080:8080"
     environment:
-      SPRING_ARTEMIS_BROKER-URL: "tcp://mq:61616"
-      SPRING_DATA_REDIS_HOST: "redis"
+      - SPRING_ARTEMIS_BROKER-URL="tcp://mq:61616"
+      - SPRING_DATA_REDIS_HOST="redis"
+      - JC_AGGREGATE_REDIS_ENDPOINT="redis:6379"
+      - JC_AGGREGATE_TIMER_PERIOD=100
     depends_on:
       - mq
       - redis
