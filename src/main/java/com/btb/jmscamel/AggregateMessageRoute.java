@@ -11,6 +11,7 @@ import org.apache.camel.component.redis.processor.aggregate.RedisAggregationRepo
 import org.apache.camel.model.dataformat.JsonLibrary;
 import org.apache.camel.spi.AggregationRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.stream.Stream;
 @Component
 @Slf4j
 @RequiredArgsConstructor
+@ConditionalOnProperty(value = "jc.aggregate.enabled", havingValue = "true", matchIfMissing = true)
 public class AggregateMessageRoute extends RouteBuilder {
 
     private final ProducerTemplate producerTemplate;

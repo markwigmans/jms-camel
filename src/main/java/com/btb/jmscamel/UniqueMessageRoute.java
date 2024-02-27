@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.redis.processor.idempotent.RedisStringIdempotentRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ import java.util.UUID;
 @Component
 @Slf4j
 @RequiredArgsConstructor
+@ConditionalOnProperty(value = "jc.unique.enabled", havingValue = "true", matchIfMissing = true)
 public class UniqueMessageRoute extends RouteBuilder {
 
     private final RedisTemplate<String, String> redisTemplate;

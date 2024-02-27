@@ -39,3 +39,17 @@ Follow these steps to get the application up and running:
     - Access the JMS Management interface at [http://localhost:8161/](http://localhost:8161/) using the credentials `CNL/CNL`.
 
 1. The logging of the **App** container shows the progress as well.
+
+## Configuration
+
+| Configuration                       | Description                                |        Default |
+|-------------------------------------|--------------------------------------------|---------------:|
+| jc.aggregate.enabled                | Aggregate route enabled                    |           true |
+| jc.aggregate.redis.endpoint         | endpoint of Redis DB                       | 127.0.0.1:6379 |
+| jc.aggregate.timer.period           | timer for aggregate test messages (ms)     |           5000 |
+| jc.aggregate.completion.timeout.sec | timer for aggregate completion timeout (s) |             60 |
+| jc.aggregate.range.start            | Minimum number of messages per ID          |              5 |
+| jc.aggregate.range.end              | Maximum number of messages per ID          |             10 |
+| jc.unique.enabled                   | Unique route enabled                       |           true |
+| jc.unique.redis.expiry              | timer for unique messages expiry (s)       |             60 |
+| jc.unique.timer.period              | timer for unique test messages (ms)        |           5000 |         
