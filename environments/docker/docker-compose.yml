@@ -25,7 +25,8 @@ services:
       - ARTEMIS_PASSWORD=CNL
 
   redis:
-    image: redis:latest
+    #image: redis:latest
+    image: eqalpha/keydb
     restart: always
     ports:
       - "6379:6379"

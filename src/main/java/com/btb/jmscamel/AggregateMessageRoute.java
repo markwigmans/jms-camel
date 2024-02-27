@@ -34,13 +34,8 @@ public class AggregateMessageRoute extends RouteBuilder {
     @Value("${jc.aggregate.timer.period:5000}")
     private int period;
 
-    @Value("${jc.aggregate.completion.timeout.sec:10}")
+    @Value("${jc.aggregate.completion.timeout.sec:60}")
     private int completionTimeout;
-
-    @Value("${jc.aggregate.completion.checker.interval.start:500}")
-    private int startCompletionCheckerInterval;
-    @Value("${jc.aggregate.completion.checker.interval.end:1500}")
-    private int endCompletionCheckerInterval;
 
     @Value("${jc.aggregate.range.start:5}")
     private int startRange;
@@ -73,7 +68,6 @@ public class AggregateMessageRoute extends RouteBuilder {
                 .aggregationRepository(repository)
                 .completionTimeout(TimeUnit.MILLISECONDS.convert(completionTimeout, TimeUnit.SECONDS))
                 .parallelProcessing()
-                .completionTimeoutCheckerInterval(ThreadLocalRandom.current().nextInt(startCompletionCheckerInterval, endCompletionCheckerInterval))
                 .process(exchange -> {
                     final List<MyMessage> messages = exchange.getIn().getBody(List.class);
                     log.debug("Aggregated Messages: {}", messages);
