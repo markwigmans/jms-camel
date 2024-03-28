@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.3</version>
+        <version>3.2.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -64,7 +64,7 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-redis</artifactId>
-            <version>${camel.version}</version>
+            <version>${camel-version}</version>
         </dependency>
 
         <dependency>
@@ -118,6 +118,4 @@
             </build>
         </profile>
     </profiles>
-
-
 </project>

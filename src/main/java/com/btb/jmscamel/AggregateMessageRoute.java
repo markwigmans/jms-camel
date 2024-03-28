@@ -74,7 +74,7 @@ public class AggregateMessageRoute extends RouteBuilder {
                     final List<MyMessage> messages = exchange.getIn().getBody(List.class);
                     log.debug("Aggregated Messages: {}", messages);
                     if (!messages.isEmpty()) {
-                        String id = messages.get(0).id();
+                        String id = messages.getFirst().id();
                         List<String> data = messages.stream().map(MyMessage::data).toList();
                         exchange.getIn().setBody(new MyMessages(id,data));
                     }
