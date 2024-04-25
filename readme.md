@@ -52,4 +52,12 @@ Follow these steps to get the application up and running:
 | jc.aggregate.range.end              | Maximum number of messages per ID          |             10 |
 | jc.unique.enabled                   | Unique route enabled                       |           true |
 | jc.unique.redis.expiry              | timer for unique messages expiry (s)       |             60 |
-| jc.unique.timer.period              | timer for unique test messages (ms)        |           5000 |         
+| jc.unique.timer.period              | timer for unique test messages (ms)        |           5000 |
+
+## Known Problems
+
+It was tried to use camel/spring 4.5.0, however that gave two problems:
+- class 'RedisStringIdempotentRepository' is unknown to version 4.5.0
+- after replacing it with 'SpringRedisStringIdempotentRepository' we got connection problems with Redis.
+
+Currently it is unknown what prevent us from using 4.5.0
