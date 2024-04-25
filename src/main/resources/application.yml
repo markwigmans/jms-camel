@@ -9,3 +9,9 @@ spring:
 camel:
   springboot:
     main-run-controller: true
+
+#jc:
+#  aggregate:
+#    enabled: false
+#  unique:
+#    enabled: false
