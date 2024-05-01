@@ -1,4 +1,7 @@
 spring:
+  data:
+    redis:
+      host: redis
   artemis:
     broker-url: tcp://localhost:61616
     user: CNL
@@ -15,3 +18,4 @@ camel:
 #    enabled: false
 #  unique:
 #    enabled: false
+
