@@ -3,7 +3,7 @@ package com.btb.jmscamel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.redis.processor.idempotent.RedisStringIdempotentRepository;
+import org.apache.camel.component.redis.processor.idempotent.SpringRedisStringIdempotentRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -26,7 +26,7 @@ public class UniqueMessageRoute extends RouteBuilder {
     private int period;
 
     public void configure() {
-        RedisStringIdempotentRepository redisIdRepository = new RedisStringIdempotentRepository(redisTemplate,"jms-messages");
+        SpringRedisStringIdempotentRepository redisIdRepository = new SpringRedisStringIdempotentRepository(redisTemplate,"jms-messages");
         redisIdRepository.setExpiry(expiry);
 
         // Send a message to a queue every X period
