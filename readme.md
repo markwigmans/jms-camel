@@ -25,6 +25,20 @@ sequenceDiagram
 Pattern according top [Aggregator](https://www.enterpriseintegrationpatterns.com/patterns/messaging/Aggregator.html) 
 implemented in class *AggregateMessageRoute*.
 
+```mermaid
+sequenceDiagram
+    participant A_INCOMING
+    participant A_AGGREGATED
+    participant PROCESSED
+    loop every 5 seconds
+        A_INCOMING->>A_INCOMING: New event
+    end
+    A_INCOMING->>A_AGGREGATED: Send multiple messages for event ID
+    break when timeout of 60s
+       A_AGGREGATED->>PROCESSED: aggregated
+    end
+```
+
 ## Running the Application
 
 Follow these steps to get the application up and running:
@@ -56,6 +70,14 @@ Follow these steps to get the application up and running:
 
 ## Known Problems
 
-It was tried to use camel/spring 4.5.0, however that gave two problems:
-- class 'RedisStringIdempotentRepository' is unknown to version 4.5.0 [Apache Camel 4.X Upgrade Guide](https://camel.apache.org/manual/camel-4x-upgrade-guide-4_5.html)
-- after replacing it with 'SpringRedisStringIdempotentRepository' we got connection problems with Redis. As long as we connect to 'localhost' (outside the context of a container) it works. So configuring the connecting is a problem, unclear why.
+### Issues Encountered with Apache Camel/Spring 4.5.0
+While attempting to integrate Apache Camel/Spring 4.5.0, we encountered the following issues:
+
+#### 1. Class Compatibility Issue
+- The `RedisStringIdempotentRepository` class is not recognized in version 4.5.0. For more details, refer to the [Apache Camel 4.X Upgrade Guide](https://camel.apache.org/manual/camel-4x-upgrade-guide-4_5.html).
+
+#### 2. Connection Issues with Redis
+- After switching to `SpringRedisStringIdempotentRepository`, we experienced problems establishing a connection to Redis. These issues do not occur when connecting to `localhost` outside the context of a container.
+
+#### Current Status
+- The configuration of the Redis connection remains problematic, and the cause is unclear. Further investigation is required to resolve these connectivity issues.
