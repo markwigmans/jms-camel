@@ -57,7 +57,5 @@ Follow these steps to get the application up and running:
 ## Known Problems
 
 It was tried to use camel/spring 4.5.0, however that gave two problems:
-- class 'RedisStringIdempotentRepository' is unknown to version 4.5.0
-- after replacing it with 'SpringRedisStringIdempotentRepository' we got connection problems with Redis.
-
-Currently it is unknown what prevent us from using 4.5.0
+- class 'RedisStringIdempotentRepository' is unknown to version 4.5.0 [Apache Camel 4.X Upgrade Guide](https://camel.apache.org/manual/camel-4x-upgrade-guide-4_5.html)
+- after replacing it with 'SpringRedisStringIdempotentRepository' we got connection problems with Redis. As long as we connect to 'localhost' (outside the context of a container) it works. So configuring the connecting is a problem, unclear why.
