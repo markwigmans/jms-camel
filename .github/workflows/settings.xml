@@ -12,7 +12,7 @@
                 </repository>
                 <repository>
                     <id>github</id>
-                    <url>https://maven.pkg.github.com/competentNL/cnl-datamodel</url>
+                    <url>https://maven.pkg.github.com/markwigmans/jms-camel</url>
                     <snapshots>
                         <enabled>true</enabled>
                     </snapshots>
