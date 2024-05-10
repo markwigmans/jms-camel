@@ -7,9 +7,13 @@ services:
     environment:
       - SPRING_ARTEMIS_BROKER-URL=tcp://mq:61616
       - SPRING_DATA_REDIS_HOST=redis
+      - JC.UNIQUE.ENABLED=false
+      - JC_UNIQUE_TIMER_PERIOD=2000
+      - JC.UNIQUE.REDIS.EXPIRY=10
       - JC_AGGREGATE_REDIS_ENDPOINT=redis:6379
-      - JC_AGGREGATE_TIMER_PERIOD=500
-      - JC_UNIQUE_TIMER_PERIOD=500
+      - JC.AGGREGATE.ENABLED=false
+      - JC_AGGREGATE_TIMER_PERIOD=2000
+      - JC.AGGREGATE.COMPLETION.TIMEOUT.SEC=10
     depends_on:
       - mq
       - redis
@@ -25,7 +29,6 @@ services:
       - ARTEMIS_PASSWORD=CNL
 
   redis:
-    #image: redis:latest
     image: eqalpha/keydb
     restart: always
     ports:
