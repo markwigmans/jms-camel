@@ -7,8 +7,8 @@ import org.apache.camel.AggregationStrategy;
 import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.redis.processor.aggregate.RedisAggregationRepository;
 import org.apache.camel.model.dataformat.JsonLibrary;
+import org.apache.camel.processor.aggregate.MemoryAggregationRepository;
 import org.apache.camel.spi.AggregationRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -30,9 +30,6 @@ public class AggregateMessageRoute extends RouteBuilder {
     private final ProducerTemplate producerTemplate;
     private final AtomicInteger counter = new AtomicInteger();
 
-    @Value("${jc.aggregate.redis.endpoint:127.0.0.1:6379}")
-    private String endpoint;
-
     @Value("${jc.aggregate.timer.period:5000}")
     private int period;
 
@@ -48,7 +45,7 @@ public class AggregateMessageRoute extends RouteBuilder {
      *
      */
     public void configure() {
-        AggregationRepository repository = new RedisAggregationRepository("jms-aggregate", endpoint);
+        AggregationRepository repository = new MemoryAggregationRepository();
 
         // Send a message to a queue every X period
         from(String.format("timer:aggregate.testTimer?period=%d", period)).routeId("aggregate.generate-route")
